@@ -1,4 +1,4 @@
-﻿@page "/addsubelement/{Id}"
+﻿@page "/addsubelement/{Id:int}"
 @using OrderManagement.Shared
 
 @inject HttpClient Http
@@ -10,7 +10,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="Window"> Window: @window.Name</label>
-            <input type="hidden" name="WindowId" @bind="@Id" />
+            <input type="hidden" name="WindowId" @bind="@subelement.WindowId" />
         </div>
     </div>
 </div>
@@ -48,21 +48,21 @@
 </div>
 @code {
     [Parameter]
-    public string Id { get; set; }
+    public int Id { get; set; }
 
     SubelementAddModel subelement = new SubelementAddModel();
 
     WindowViewModel window = new WindowViewModel();
     protected override async Task OnInitializedAsync()
     {
-        window = await Http.GetFromJsonAsync<WindowViewModel>("api/window/" + Id);
-        subelement.WindowId = window.Id;
+        //window = await Http.GetFromJsonAsync<WindowViewModel>("api/window/" + Id);
+        subelement.WindowId = Id;
     }
 
     protected async Task Save()
     {
-        var response = await Http.PostAsJsonAsync("api/Window", @subelement);
-        WindowViewModel orderResponse = await response.Content.ReadFromJsonAsync<WindowViewModel>();
+        var response = await Http.PostAsJsonAsync("api/Subelement", @subelement);
+        SubelementViewModel orderResponse = await response.Content.ReadFromJsonAsync<SubelementViewModel>();
         if (orderResponse?.Id > 0)
         {
             await JsRuntime.InvokeVoidAsync("alert", "Saved Successfully!");

@@ -5,7 +5,7 @@
 
 <h3>Subelements for Window: @Id</h3>
 <div>
-    <a href="/addwindow/@Id" class="btn btn-primary mb-1">Add New</a>
+    <a href="/addsubelement/@Id" class="btn btn-primary mb-1">Add New</a>
     @if (subelements != null && subelements.Any())
     {
         <table class="table table-striped">
@@ -29,7 +29,7 @@
                         <td>@subelement.Width</td>
                         <td>@subelement.Height</td>
                         <td>
-                            <a href="/deletewindow/@subelement.Id">Delete</a>
+                            <a href="/deletesubelement/@subelement.Id">Delete</a>
                         </td>
                     </tr>
                 }

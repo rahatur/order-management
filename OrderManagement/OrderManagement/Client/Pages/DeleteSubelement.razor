@@ -1,4 +1,4 @@
-﻿@page "/deletesubelement/{Id}"
+﻿@page "/deletesubelement/{Id:int}"
 @using OrderManagement.Shared
 
 @inject HttpClient Http
@@ -25,17 +25,18 @@
         <div class="form-group">
             <input type="button" class="btn btn-danger" @onclick="@Delete" value="Delete" />
             <input type="button" class="btn" @onclick="@Cancel" value="Cancel" />
-            <input type="hidden" @bind="@Id" />
+            <input type="hidden" @bind="@subelement.Id" />
         </div>
     </div>
 </div>
 @code {
     [Parameter]
-    public string Id{ get; set; }
+    public int Id{ get; set; }
 
     SubelementViewModel subelement = new SubelementViewModel();
     protected override async Task OnInitializedAsync()
     {
+        subelement.Id = Id;
     }
 
     protected async Task Delete()
