@@ -13,11 +13,11 @@ namespace OrderManagement.Shared
 
         [Display(Name = "Order Id")]
         public int OrderId { get; set; }
-        
-        [Display(Name = "Order Id")]
-        public string OrderNAme { get; set; }
 
         [Display(Name = "Name of the Order")]
+        public string OrderName { get; set; }
+
+        [Display(Name = "Name of the Window")]
         public string Name { get; set; }
 
         public int Quantity { get; set; }

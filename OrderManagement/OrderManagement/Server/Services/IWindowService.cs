@@ -10,7 +10,7 @@ namespace OrderManagement.Server.Services
 
         Task<bool> DeleteWindow(int id);
 
-        Task<List<Window>> GetAllWindows();
+        Task<List<Window>> GetAllWindows(int orderId);
 
         Task<Window> GetWindow(int id);
     }

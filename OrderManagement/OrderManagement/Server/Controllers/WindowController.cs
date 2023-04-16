@@ -18,17 +18,24 @@ namespace OrderManagement.Server.Controllers
             _windowService = windowService;
         }
 
-        [HttpGet]
-        public async Task<List<Window>> GetAll()
-        {
-            return await _windowService.GetAllWindows();
-        }
+        //[HttpGet]
+        //public async Task<List<Window>> GetAll()
+        //{
+        //    return await _windowService.GetAllWindows();
+        //}
 
         [HttpGet("{id}")]
-        public async Task<Window> Get(int id)
+        public async Task<List<Window>> GetAll(int id)
         {
-            return await _windowService.GetWindow(id);
+            //Load by OrderId
+            return await _windowService.GetAllWindows(id);
         }
+
+        //[HttpGet("{id}")]
+        //public async Task<Window> GetWindow(int id)
+        //{
+        //    return await _windowService.GetWindow(id);
+        //}
 
         [HttpPost]
         public async Task<Window> AddWindow([FromBody] WindowAddModel model)

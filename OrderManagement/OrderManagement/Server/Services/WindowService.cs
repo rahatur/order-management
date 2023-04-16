@@ -1,5 +1,6 @@
 ﻿using OrderManagement.Server.Models;
 using OrderManagement.Server.Repository;
+using System.Collections.Generic;
 
 namespace OrderManagement.Server.Services
 {
@@ -38,9 +39,11 @@ namespace OrderManagement.Server.Services
             return true;
         }
 
-        public async Task<List<Window>> GetAllWindows()
+        public async Task<List<Window>> GetAllWindows(int orderId)
         {
-            return await _window.GetAllAsync();
+            //return await _window.GetAllAsync();
+            var windows = await _window.GetAllAsync();
+            return windows.Where(w => w.OrderId == orderId).ToList();
         }
 
         public async Task<Window> GetWindow(int id)

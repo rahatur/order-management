@@ -15,6 +15,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">State</th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -24,6 +25,9 @@
                         <th scope="row">@order.Id</th>
                         <td>@order.Name</td>
                         <td>@order.State</td>
+                        <td>
+                            <a href="/windowlist/@order.Id">Windows</a>
+                        </td>
                         <td>
                             <a href="/editorder/@order.Id">Edit</a> |
                             <a href="/deleteorder/@order.Id">Delete</a>

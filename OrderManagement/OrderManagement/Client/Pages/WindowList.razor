@@ -1,12 +1,12 @@
-﻿@page "/windowlist"
+﻿@page "/windowlist/{Id}"
 @using OrderManagement.Shared
 
 @inject HttpClient _httpClient
 
-<h3>Window List</h3>
+<h3>Windows for Order: @Id</h3>
 <div>
     <a href="/addwindow" class="btn btn-primary mb-1">Add New</a>
-    @if (windows != null)
+    @if (windows != null && windows.Any())
     {
         <table class="table table-striped">
             <thead>
@@ -27,21 +27,28 @@
                         <td>@window.Name</td>
                         <td>@window.Quantity</td>
                         <td>
-                            <a href="/editorder/@window.Id">Edit</a> |
-                            <a href="/deleteorder/@window.Id">Delete</a>
+                            <a href="/editwindow/@window.Id">Edit</a> |
+                            <a href="/deletewindow/@window.Id">Delete</a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     }
+    else
+    {
+        <p>No window data exists for the selected Order</p>
+    }
 </div>
 @code {
+    [Parameter]
+    public string Id { get; set; }
+
     List<WindowViewModel> windows = new List<WindowViewModel>();
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await _httpClient.GetAsync("api/window");
+        var response = await _httpClient.GetAsync("api/Window/" + Id);
         response.EnsureSuccessStatusCode();
         windows = await response.Content.ReadFromJsonAsync<List<WindowViewModel>>();
     }
