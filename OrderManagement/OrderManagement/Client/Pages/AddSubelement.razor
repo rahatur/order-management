@@ -1,32 +1,40 @@
-﻿@page "/addWindow/{Id}"
+﻿@page "/addsubelement/{Id}"
 @using OrderManagement.Shared
 
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime
 
-<h3>Create a new Window</h3>
+<h3>Create a new Subelement</h3>
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="Order"> Order: @order.Name</label>
-            <input type="hidden" name="OrderId" @bind="@window.OrderId" />
+            <label for="Window"> Window: @window.Name</label>
+            <input type="hidden" name="WindowId" @bind="@Id" />
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="Name"> Window Name *</label>
-            <input form="Name" class="form-control" @bind="@window.Name" />
+            <label for="Name"> Type *</label>
+            <input form="Name" class="form-control" @bind="@subelement.Type" />
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="Quantity"> Quantity *</label>
-            <input form="Quantity" class="form-control" @bind="@window.Quantity" />
+            <label for="Quantity"> Width *</label>
+            <input form="Quantity" class="form-control" @bind="@subelement.Width" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="Quantity"> Height *</label>
+            <input form="Quantity" class="form-control" @bind="@subelement.Height" />
         </div>
     </div>
 </div>
@@ -42,18 +50,18 @@
     [Parameter]
     public string Id { get; set; }
 
-    WindowAddModel window = new WindowAddModel();
+    SubelementAddModel subelement = new SubelementAddModel();
 
-    WindowViewModel order = new WindowViewModel();
+    WindowViewModel window = new WindowViewModel();
     protected override async Task OnInitializedAsync()
     {
-        order = await Http.GetFromJsonAsync<WindowViewModel>("api/order/" + Id);
-        window.OrderId = order.Id;
+        window = await Http.GetFromJsonAsync<WindowViewModel>("api/window/" + Id);
+        subelement.WindowId = window.Id;
     }
 
     protected async Task Save()
     {
-        var response = await Http.PostAsJsonAsync("api/Window", @window);
+        var response = await Http.PostAsJsonAsync("api/Window", @subelement);
         WindowViewModel orderResponse = await response.Content.ReadFromJsonAsync<WindowViewModel>();
         if (orderResponse?.Id > 0)
         {

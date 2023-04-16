@@ -10,7 +10,7 @@ namespace OrderManagement.Server.Services
 
         Task<bool> DeleteSubelement(int id);
 
-        Task<List<Subelement>> GetAllSubelements();
+        Task<List<Subelement>> GetAllSubelements(int windowId);
 
         Task<Subelement> GetSubelement(int id);
     }

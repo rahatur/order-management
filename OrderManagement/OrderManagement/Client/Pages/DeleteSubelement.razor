@@ -1,20 +1,20 @@
-﻿@page "/deletewindow/{Id}"
+﻿@page "/deletesubelement/{Id}"
 @using OrderManagement.Shared
 
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime
 
-<h3>Delete a Window</h3>
-@if(window != null)
+<h3>Delete a Subelement</h3>
+@if(subelement != null)
 {
-<p>Are you sure you want to delete Window: <b>@Id</b></p>
+<p>Are you sure you want to delete Subelement: <b>@Id</b></p>
 <div class="row">
     <div class="col-md-4">
         <table class="table">
             <tr>
                 <td>Id</td>
-                <td>@window.Id</td>
+                <td>@subelement.Id</td>
             </tr>
         </table>
     </div>
@@ -33,14 +33,14 @@
     [Parameter]
     public string Id{ get; set; }
 
-    WindowViewModel window = new WindowViewModel();
+    SubelementViewModel subelement = new SubelementViewModel();
     protected override async Task OnInitializedAsync()
     {
     }
 
     protected async Task Delete()
     {
-        var response = await Http.DeleteAsync("api/Window/" + Id);
+        var response = await Http.DeleteAsync("api/Subelement/" + Id);
         bool deleteResponse = await response.Content.ReadFromJsonAsync<bool>();
         if (deleteResponse)
         {

@@ -1,73 +1,70 @@
-﻿@page "/addWindow/{Id}"
+﻿@page "/editsubelement/{Id}"
 @using OrderManagement.Shared
 
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime
 
-<h3>Create a new Window</h3>
+<h3>Edit a Subelement</h3>
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="Order"> Order: @order.Name</label>
-            <input type="hidden" name="OrderId" @bind="@window.OrderId" />
+            <label for="Name"> Type *</label>
+            <input form="Name" class="form-control" @bind="@subelement.Type" />
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="Name"> Window Name *</label>
-            <input form="Name" class="form-control" @bind="@window.Name" />
+            <label for="State"> Width *</label>
+            <input form="State" class="form-control" @bind="@subelement.Width" />
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="Quantity"> Quantity *</label>
-            <input form="Quantity" class="form-control" @bind="@window.Quantity" />
+            <label for="State"> Height *</label>
+            <input form="State" class="form-control" @bind="@subelement.Height" />
         </div>
     </div>
 </div>
-<div class="row mt-1">
+<div class="row">
     <div class="col-md-4">
         <div class="form-group">
             <input type="button" class="btn btn-primary" @onclick="@Save" value="Save" />
             <input type="button" class="btn" @onclick="@Cancel" value="Cancel" />
+            <input type="hidden" name="Id" @bind="@subelement.Id" />
         </div>
     </div>
 </div>
 @code {
     [Parameter]
-    public string Id { get; set; }
+    public string Id{ get; set; }
 
-    WindowAddModel window = new WindowAddModel();
+    SubelementUpdateModel subelement = new SubelementUpdateModel();
 
-    WindowViewModel order = new WindowViewModel();
     protected override async Task OnInitializedAsync()
     {
-        order = await Http.GetFromJsonAsync<WindowViewModel>("api/order/" + Id);
-        window.OrderId = order.Id;
     }
 
     protected async Task Save()
     {
-        var response = await Http.PostAsJsonAsync("api/Window", @window);
-        WindowViewModel orderResponse = await response.Content.ReadFromJsonAsync<WindowViewModel>();
-        if (orderResponse?.Id > 0)
+        var response = await Http.PutAsJsonAsync("api/Subelement/" + Id, @subelement);
+        bool orderResponse = await response.Content.ReadFromJsonAsync<bool>();
+        if (orderResponse)
         {
-            await JsRuntime.InvokeVoidAsync("alert", "Saved Successfully!");
+            await JsRuntime.InvokeVoidAsync("alert", "Updated Successfully!");
             NavigationManager.NavigateTo("orderlist");
         }
         else
         {
             await JsRuntime.InvokeVoidAsync("alert", "There was a problem processing the request. Please try again.");
         }
-
     }
     void Cancel()
     {
-        NavigationManager.NavigateTo("/windowlist/" + Id);
+        NavigationManager.NavigateTo("orderlist");
     }
 }

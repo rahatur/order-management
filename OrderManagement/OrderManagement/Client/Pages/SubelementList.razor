@@ -1,0 +1,56 @@
+﻿@page "/subelementlist/{Id}"
+@using OrderManagement.Shared
+
+@inject HttpClient _httpClient
+
+<h3>Subelements for Window: @Id</h3>
+<div>
+    <a href="/addwindow/@Id" class="btn btn-primary mb-1">Add New</a>
+    @if (subelements != null && subelements.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Window Id</th>
+                    <th scope="col">Subelement Type</th>
+                    <th scope="col">Width Quantity</th>
+                    <th scope="col">Height</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var subelement in subelements)
+                {
+                    <tr>
+                        <th scope="row">@subelement.Id</th>
+                        <td>@subelement.WindowId</td>
+                        <td>@subelement.Type</td>
+                        <td>@subelement.Width</td>
+                        <td>@subelement.Height</td>
+                        <td>
+                            <a href="/deletewindow/@subelement.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No Subelement data exists for the selected Window</p>
+    }
+</div>
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    List<SubelementViewModel> subelements = new List<SubelementViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await _httpClient.GetAsync("api/Subelement/" + Id);
+        response.EnsureSuccessStatusCode();
+        subelements = await response.Content.ReadFromJsonAsync<List<SubelementViewModel>>();
+    }
+}

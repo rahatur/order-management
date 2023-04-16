@@ -39,9 +39,11 @@ namespace OrderManagement.Server.Services
             return true;
         }
 
-        public async Task<List<Subelement>> GetAllSubelements()
+        public async Task<List<Subelement>> GetAllSubelements(int windowId)
         {
-            return await _subelement.GetAllAsync();
+            //return await _subelement.GetAllAsync();
+            var subelements = await _subelement.GetAllAsync();
+            return subelements.Where(s => s.WindowId == windowId).ToList();
         }
 
         public async Task<Subelement> GetSubelement(int id)

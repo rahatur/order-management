@@ -16,6 +16,7 @@
                     <th scope="col">Window Name</th>
                     <th scope="col">Window Quantity</th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -27,7 +28,9 @@
                         <td>@window.Name</td>
                         <td>@window.Quantity</td>
                         <td>
-                            @*<a href="/editwindow/@window.Id">Edit</a> |*@
+                            <a href="/subelementlist/@window.Id">Subelements</a>
+                        </td>
+                        <td>
                             <a href="/deletewindow/@window.Id">Delete</a>
                         </td>
                     </tr>
