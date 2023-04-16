@@ -10,13 +10,13 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="Name"> Name *</label>
-            <input form="Name" class="form-control" @bind="@order.Name" />
+            <input form="Name" class="form-control" @bind="@window.Name" />
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="State"> State *</label>
-            <input form="State" class="form-control" @bind="@order.State" />
+            <label for="State"> Quantity *</label>
+            <input form="State" class="form-control" @bind="@window.Quantity" />
         </div>
     </div>
 </div>
@@ -25,24 +25,24 @@
         <div class="form-group">
             <input type="button" class="btn btn-primary" @onclick="@Save" value="Save" />
             <input type="button" class="btn" @onclick="@Cancel" value="Cancel" />
-            <input type="hidden" name="Id" value="@order.Id" />
+            <input type="hidden" name="Id" @bind="@window.Id" />
         </div>
     </div>
 </div>
 @code {
-
     [Parameter]
     public string Id{ get; set; }
-    OrderUpdateModel order = new OrderUpdateModel();
+
+    WindowUpdateModel window = new WindowUpdateModel();
 
     protected override async Task OnInitializedAsync()
     {
-        order = await Http.GetFromJsonAsync<OrderUpdateModel>("api/order/" + Id);
+        //window = await Http.GetFromJsonAsync<WindowUpdateModel>("api/window/GetWindow?wid=" + Id);
     }
 
     protected async Task Save()
     {
-        var response = await Http.PutAsJsonAsync("api/Order/" + Id, @order);
+        var response = await Http.PutAsJsonAsync("api/Window/" + Id, @window);
         bool orderResponse = await response.Content.ReadFromJsonAsync<bool>();
         if (orderResponse)
         {
@@ -56,6 +56,6 @@
     }
     void Cancel()
     {
-        NavigationManager.NavigateTo("orderlist");
+        NavigationManager.NavigateTo("/windowlist/" + window.OrderId);
     }
 }
