@@ -1,4 +1,4 @@
-﻿@page "/addwindow"
+﻿@page "/addWindow/{Id}"
 @using OrderManagement.Shared
 
 @inject HttpClient Http
@@ -9,15 +9,15 @@
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="Order"> Order *</label>
-            <input form="Order" class="form-control" @bind="@window.OrderId" />
+            <label for="Order"> Order: @order.Name</label>
+            <input type="hidden" name="OrderId" @bind="@window.OrderId" />
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="Name"> Name *</label>
+            <label for="Name"> Window Name *</label>
             <input form="Name" class="form-control" @bind="@window.Name" />
         </div>
     </div>
@@ -39,15 +39,21 @@
     </div>
 </div>
 @code {
+    [Parameter]
+    public string Id { get; set; }
+
     WindowAddModel window = new WindowAddModel();
 
+    OrderViewModel order = new OrderViewModel();
     protected override async Task OnInitializedAsync()
     {
+        order = await Http.GetFromJsonAsync<OrderViewModel>("api/order/" + Id);
+        window.OrderId = order.Id;
     }
 
     protected async Task Save()
     {
-        var response = await Http.PostAsJsonAsync("api/Order", window);
+        var response = await Http.PostAsJsonAsync("api/Window", @window);
         WindowViewModel orderResponse = await response.Content.ReadFromJsonAsync<WindowViewModel>();
         if (orderResponse?.Id > 0)
         {
@@ -62,6 +68,6 @@
     }
     void Cancel()
     {
-        NavigationManager.NavigateTo("orderlist");
+        NavigationManager.NavigateTo("/windowlist/" + Id);
     }
 }

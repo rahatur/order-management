@@ -5,7 +5,7 @@
 
 <h3>Windows for Order: @Id</h3>
 <div>
-    <a href="/addwindow" class="btn btn-primary mb-1">Add New</a>
+    <a href="/addwindow/@Id" class="btn btn-primary mb-1">Add New</a>
     @if (windows != null && windows.Any())
     {
         <table class="table table-striped">
@@ -13,8 +13,8 @@
                 <tr>
                     <th scope="col">Id</th>
                     <th scope="col">Order Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Quantity</th>
+                    <th scope="col">Window Name</th>
+                    <th scope="col">Window Quantity</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
