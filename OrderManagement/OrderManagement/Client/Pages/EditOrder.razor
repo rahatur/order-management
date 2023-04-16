@@ -1,0 +1,61 @@
+﻿@page "/editorder/{Id}"
+@using OrderManagement.Shared
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<h3>Edit an Order</h3>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="Name"> Name *</label>
+            <input form="Name" class="form-control" @bind="@order.Name" />
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="State"> State *</label>
+            <input form="State" class="form-control" @bind="@order.State" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="button" class="btn btn-primary" @onclick="@Save" value="Save" />
+            <input type="button" class="btn" @onclick="@Cancel" value="Cancel" />
+            <input type="hidden" name="Id" value="@order.Id" />
+        </div>
+    </div>
+</div>
+@code {
+
+    [Parameter]
+    public string Id{ get; set; }
+    OrderUpdateModel order = new OrderUpdateModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        order = await Http.GetFromJsonAsync<OrderUpdateModel>("api/order/" + Id);
+    }
+
+    protected async Task Save()
+    {
+        var response = await Http.PutAsJsonAsync("api/Order/" + Id, @order);
+        bool orderResponse = await response.Content.ReadFromJsonAsync<bool>();
+        if (orderResponse)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Updated Successfully!");
+            NavigationManager.NavigateTo("orderlist");
+        }
+        else
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "There was a problem processing the request. Please try again.");
+        }
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("orderlist");
+    }
+}

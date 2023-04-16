@@ -1,0 +1,59 @@
+﻿@page "/addorder"
+@using OrderManagement.Shared
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<h3>Create a new Order</h3>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="Name"> Name *</label>
+            <input form="Name" class="form-control" @bind="@order.Name" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="State"> State *</label>
+            <input form="State" class="form-control" @bind="@order.State" />
+        </div>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="button" class="btn btn-primary" @onclick="@Save" value="Save" />
+            <input type="button" class="btn" @onclick="@Cancel" value="Cancel" />
+        </div>
+    </div>
+</div>
+@code {
+    OrderAddModel order = new OrderAddModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    protected async Task Save()
+    {
+        var response = await Http.PostAsJsonAsync("api/Order", @order);
+        OrderViewModel orderResponse = await response.Content.ReadFromJsonAsync<OrderViewModel>();
+        if (orderResponse?.Id > 0)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Saved Successfully!");
+            NavigationManager.NavigateTo("orderlist");
+        }
+        else
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "There was a problem processing the request. Please try again.");
+        }
+
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("orderlist");
+    }
+}

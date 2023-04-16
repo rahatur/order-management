@@ -1,0 +1,48 @@
+﻿@page "/windowlist"
+@using OrderManagement.Shared
+
+@inject HttpClient _httpClient
+
+<h3>Window List</h3>
+<div>
+    <a href="/addwindow" class="btn btn-primary mb-1">Add New</a>
+    @if (windows != null)
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Order Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var window in windows)
+                {
+                    <tr>
+                        <th scope="row">@window.Id</th>
+                        <td>@window.OrderId</td>
+                        <td>@window.Name</td>
+                        <td>@window.Quantity</td>
+                        <td>
+                            <a href="/editorder/@window.Id">Edit</a> |
+                            <a href="/deleteorder/@window.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+@code {
+    List<WindowViewModel> windows = new List<WindowViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await _httpClient.GetAsync("api/window");
+        response.EnsureSuccessStatusCode();
+        windows = await response.Content.ReadFromJsonAsync<List<WindowViewModel>>();
+    }
+}

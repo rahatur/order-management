@@ -1,0 +1,67 @@
+﻿@page "/addwindow"
+@using OrderManagement.Shared
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+<h3>Create a new Window</h3>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="Order"> Order *</label>
+            <input form="Order" class="form-control" @bind="@window.OrderId" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="Name"> Name *</label>
+            <input form="Name" class="form-control" @bind="@window.Name" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="Quantity"> Quantity *</label>
+            <input form="Quantity" class="form-control" @bind="@window.Quantity" />
+        </div>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="button" class="btn btn-primary" @onclick="@Save" value="Save" />
+            <input type="button" class="btn" @onclick="@Cancel" value="Cancel" />
+        </div>
+    </div>
+</div>
+@code {
+    WindowAddModel window = new WindowAddModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    protected async Task Save()
+    {
+        var response = await Http.PostAsJsonAsync("api/Order", window);
+        WindowViewModel orderResponse = await response.Content.ReadFromJsonAsync<WindowViewModel>();
+        if (orderResponse?.Id > 0)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Saved Successfully!");
+            NavigationManager.NavigateTo("orderlist");
+        }
+        else
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "There was a problem processing the request. Please try again.");
+        }
+
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("orderlist");
+    }
+}
